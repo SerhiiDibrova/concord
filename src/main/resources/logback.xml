@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <variable name="LOG_PATTERN"
+              value="%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable"/>
+    <variable name="LOG_PATTERN_COLORIZED"
+              value="%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN_COLORIZED}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="CONTEXT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>context</key>
+            <defaultValue>concord</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${context}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${context}.log</file>
+                <append>true</append>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${context}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                    <maxHistory>40</maxHistory>
+                </rollingPolicy>
+                <encoder>
+                    <charset>utf-8</charset>
+                    <pattern>${LOG_PATTERN}</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>200</queueSize>
+        <appender-ref ref="CONTEXT"/>
+    </appender>
+
+    <logger name="com.concord" level="INFO"/>
+    <!--  <logger name="com.concord" level="TRACE"/> -->
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <root level="WARN">
+        <!--        <appender-ref ref="CONSOLE"/>-->
+        <appender-ref ref="CONTEXT"/>
+    </root>
+
+</configuration>
