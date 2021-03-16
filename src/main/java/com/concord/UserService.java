@@ -12,7 +12,7 @@ public class UserService {
 
   @PostConstruct
   private void init() {
-    randomUsersAdded();
+    initialize();
   }
 
   public User findById(final Long id) {
@@ -24,7 +24,7 @@ public class UserService {
     return null;
   }
 
-  private void randomUsersAdded() {
+  private void initialize() {
     User user1 = new User(1L, "Test Test");
     User user2 = new User(2L, "Test2 Test2");
     User user3 = new User(3L, "Test3 Test3");

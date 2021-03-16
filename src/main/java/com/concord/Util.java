@@ -18,7 +18,7 @@ public final class Util {
 
   public static String encrypt(String text) throws Exception {
 
-    Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
+    Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
     SecretKeySpec key = new SecretKeySpec(CIPHER_KEY, "AES");
     cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV));
     int paddingSize = 16 - text.length() % 16;
@@ -30,7 +30,7 @@ public final class Util {
 
   public static String decrypt(String data) throws Exception {
 
-    Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
+    Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
     SecretKeySpec key = new SecretKeySpec(CIPHER_KEY, "AES");
     cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV));
     byte[] encrypted = Base64.getDecoder().decode(data);
